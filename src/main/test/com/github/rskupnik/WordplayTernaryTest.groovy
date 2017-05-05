@@ -1,5 +1,7 @@
 package com.github.rskupnik
 
+import com.github.rskupnik.exceptions.WordplayProcessingException
+import com.github.rskupnik.exceptions.WordplaySyntaxException
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -12,6 +14,7 @@ class WordplayTernaryTest extends Specification {
     }
 
     //region Shorthand Ternary Expressions
+    @Unroll
     def "should resolve shorthand ternary expression given variable: #_var_"() {
         given:
         String script = "It was a {weather_sunny ? sunny | rainy} day."
@@ -112,13 +115,14 @@ class WordplayTernaryTest extends Specification {
         "The weather was fine."  | null
     }
 
+    @Unroll
     def "should resolve full nested ternary expression: color:#_colorVar_, shade:#_shadeVar_"() {
         given:
         String script = "The color was {color:blue ? {shade:light ? light | shade:dark ? dark | unspecified} blue | red}."
 
         when:
         wordplay.setVariable("color", _colorVar_)
-        wordplay.setVariable("shade", _shadeVar)
+        wordplay.setVariable("shade", _shadeVar_)
         String output = wordplay.process(script)
 
         then:
