@@ -8,7 +8,7 @@ public class WordplayImpl implements Wordplay {
     private Map<String, Boolean> booleanVariablesMap = new HashMap<>();
 
     @Override
-    public String process(String input) {
+    public WordplayOutput process(String input) {
         int openingBracketIndex = input.indexOf('{');
         int closingBracketIndex = input.indexOf('}');
 
@@ -29,9 +29,11 @@ public class WordplayImpl implements Wordplay {
         String result = booleanVariablesMap.get(variable) != null &&
                 booleanVariablesMap.get(variable) == true ? first : second;
 
-        return input.substring(0, openingBracketIndex)
+        return new WordplayOutput(
+                input.substring(0, openingBracketIndex)
                 + result
-                + input.substring(closingBracketIndex+1);
+                + input.substring(closingBracketIndex+1)
+        );
     }
 
     @Override

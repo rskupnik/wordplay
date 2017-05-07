@@ -20,10 +20,10 @@ class WordplayInjectionTest extends Specification {
 
         when:
         wordplay.inject(_inj_, "tired guard")
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        boolean result = output == "There was a tired guard standing at the wall."
+        boolean result = output.getText() == "There was a tired guard standing at the wall."
         result == _expected_
 
         where:
@@ -41,10 +41,10 @@ class WordplayInjectionTest extends Specification {
         when:
         wordplay.inject("guard", "tired guard")
         wordplay.inject("wall", "wall")
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        output == "There was a tired guard standing at the wall."
+        output.getText() == "There was a tired guard standing at the wall."
     }
 
     def "should parse nested external injection"() {
@@ -54,10 +54,10 @@ class WordplayInjectionTest extends Specification {
         when:
         wordplay.inject("guard", "{> cond} guard")
         wordplay.inject("cond", "tired")
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        output == "There was a tired guard standing at the wall."
+        output.getText() == "There was a tired guard standing at the wall."
     }
 
     @Unroll
@@ -69,10 +69,10 @@ class WordplayInjectionTest extends Specification {
         wordplay.inject("var", "weather_sunny")
         wordplay.inject("result_true", "sunny")
         wordplay.setVariable("weather_sunny", _var_)
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        output == _result_
+        output.getText() == _result_
 
         where:
         _result_                 | _var_
@@ -87,10 +87,10 @@ class WordplayInjectionTest extends Specification {
         when:
         wordplay.inject("weather", "{weather_sunny ? sunny | rainy}")
         wordplay.setVariable("weather_sunny", true)
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        output == "The weather was sunny."
+        output.getText() == "The weather was sunny."
     }
 
     def "should parse internal injection embedded in external injection"() {
@@ -101,10 +101,10 @@ class WordplayInjectionTest extends Specification {
 
         when:
         wordplay.inject("sky", "{> 0}")
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        output == "The sky was clear."
+        output.getText() == "The sky was clear."
     }
 
     def "should throw exception when external injection object is not provided"() {
@@ -127,10 +127,10 @@ class WordplayInjectionTest extends Specification {
                         +"> 0 clear"
 
         when:
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        output == "The sky was clear."
+        output.getText() == "The sky was clear."
     }
 
     def "should parse more than one internal injection"() {
@@ -141,10 +141,10 @@ class WordplayInjectionTest extends Specification {
                         +"> 1 day"
 
         when:
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        output == "The sky was clear on that day."
+        output.getText() == "The sky was clear on that day."
     }
 
     def "should parse nested internal injection"() {
@@ -155,10 +155,10 @@ class WordplayInjectionTest extends Specification {
                         +"> 1 clear"
 
         when:
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        output == "The sky was clear."
+        output.getText() == "The sky was clear."
     }
 
     def "should parse nested internal injection with back-reference"() {
@@ -169,10 +169,10 @@ class WordplayInjectionTest extends Specification {
                         +"> 1 {> 0}"
 
         when:
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        output == "The sky was clear."
+        output.getText() == "The sky was clear."
     }
 
     def "should parse internal injection embedded in ternary expression"() {
@@ -184,10 +184,10 @@ class WordplayInjectionTest extends Specification {
 
         when:
         wordplay.setVariable("weather_sunny", true)
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        output == "The weather was sunny."
+        output.getText() == "The weather was sunny."
     }
 
     def "should parse ternary expression injected internally"() {
@@ -198,10 +198,10 @@ class WordplayInjectionTest extends Specification {
 
         when:
         wordplay.setVariable("weather_sunny", true)
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        output == "The weather was sunny."
+        output.getText() == "The weather was sunny."
     }
 
     def "should parse external injection embedded in internal injection"() {
@@ -212,10 +212,10 @@ class WordplayInjectionTest extends Specification {
 
         when:
         wordplay.inject("sky", "clear")
-        String output = wordplay.process(input)
+        WordplayOutput output = wordplay.process(input)
 
         then:
-        output == "The sky was clear."
+        output.getText() == "The sky was clear."
     }
 
     def "should throw exception when internal injection object is not provided"() {

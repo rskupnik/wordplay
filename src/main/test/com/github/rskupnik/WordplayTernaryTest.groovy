@@ -21,10 +21,10 @@ class WordplayTernaryTest extends Specification {
 
         when:
         wordplay.setVariable("weather_sunny", _var_);
-        String output = wordplay.process(script)
+        WordplayOutput output = wordplay.process(script)
 
         then:
-        output.equals(_result_)
+        output.getText().equals(_result_)
 
         where:
         _result_              | _var_
@@ -49,10 +49,10 @@ class WordplayTernaryTest extends Specification {
 
         when:
         wordplay.setVariable("weather_sunny", true);
-        String output = wordplay.process(script)
+        WordplayOutput output = wordplay.process(script)
 
         then:
-        output.equals("It was a sunny day.")
+        output.getText.equals("It was a sunny day.")
     }
 
     def "should resolve nested shorthand ternary expression"() {
@@ -62,10 +62,10 @@ class WordplayTernaryTest extends Specification {
         when:
         wordplay.setVariable("blue", true)
         wordplay.setVariable("light", true)
-        String output = wordplay.process(script)
+        WordplayOutput output = wordplay.process(script)
 
         then:
-        output.equals("The color was light blue.")
+        output.getText.equals("The color was light blue.")
     }
 
     def "should not process nested shorthand ternary expression if not touched"() {
@@ -74,10 +74,10 @@ class WordplayTernaryTest extends Specification {
 
         when:
         wordplay.setVariable("blue", false)
-        String output = wordplay.process(script)
+        WordplayOutput output = wordplay.process(script)
 
         then:
-        output.equals("The color was red.")
+        output.getText.equals("The color was red.")
 
         // If the nested expression was evaluated, exception would be thrown due to missing light variable
     }
@@ -102,10 +102,10 @@ class WordplayTernaryTest extends Specification {
 
         when:
         wordplay.setVariable("weather", _weatherVar_)
-        String output = wordplay.process(script)
+        WordplayOutput output = wordplay.process(script)
 
         then:
-        output.equals(_result_)
+        output.getText.equals(_result_)
 
         where:
         _result_                 | _weatherVar_
@@ -123,10 +123,10 @@ class WordplayTernaryTest extends Specification {
         when:
         wordplay.setVariable("color", _colorVar_)
         wordplay.setVariable("shade", _shadeVar_)
-        String output = wordplay.process(script)
+        WordplayOutput output = wordplay.process(script)
 
         then:
-        output.equals(_result_)
+        output.getText.equals(_result_)
 
         where:
         _result_                          | _colorVar_ | _shadeVar_
@@ -145,10 +145,10 @@ class WordplayTernaryTest extends Specification {
 
         when:
         wordplay.setVariable("color", "red")
-        String output = wordplay.process(script)
+        WordplayOutput output = wordplay.process(script)
 
         then:
-        output.equals("The color was red.")
+        output.getText.equals("The color was red.")
 
         // If the nested expression was evaluated, exception would be thrown due to missing light variable
     }
