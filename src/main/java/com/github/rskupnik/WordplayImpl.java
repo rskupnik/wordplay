@@ -26,9 +26,12 @@ public class WordplayImpl implements Wordplay {
         String first = split[0];
         String second = split[1];
 
-        String result = booleanVariablesMap.get(variable) != null && booleanVariablesMap.get(variable) == true ? first : second;
+        String result = booleanVariablesMap.get(variable) != null &&
+                booleanVariablesMap.get(variable) == true ? first : second;
 
-        return input.substring(0, openingBracketIndex) + result + input.substring(closingBracketIndex+1);
+        return input.substring(0, openingBracketIndex)
+                + result
+                + input.substring(closingBracketIndex+1);
     }
 
     @Override
@@ -43,6 +46,11 @@ public class WordplayImpl implements Wordplay {
 
     @Override
     public void setVariable(String var, String value) {
+
+    }
+
+    @Override
+    public void inject(String id, String value) {
 
     }
 }
