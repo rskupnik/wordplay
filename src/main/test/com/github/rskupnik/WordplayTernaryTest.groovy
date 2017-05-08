@@ -2,6 +2,7 @@ package com.github.rskupnik
 
 import com.github.rskupnik.exceptions.WordplayProcessingException
 import com.github.rskupnik.exceptions.WordplaySyntaxException
+import com.github.rskupnik.output.WordplayOutput
 import spock.lang.Specification
 import spock.lang.Unroll
 

@@ -1,5 +1,7 @@
 package com.github.rskupnik;
 
+import com.github.rskupnik.output.WordplayOutput;
+
 import java.util.HashMap;
 import java.util.Map;
 

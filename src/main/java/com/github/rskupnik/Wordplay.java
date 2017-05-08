@@ -1,5 +1,7 @@
 package com.github.rskupnik;
 
+import com.github.rskupnik.output.WordplayOutput;
+
 public interface Wordplay {
     WordplayOutput process(String input);
     void reset();

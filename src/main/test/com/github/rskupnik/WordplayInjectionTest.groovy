@@ -1,6 +1,7 @@
 package com.github.rskupnik
 
 import com.github.rskupnik.exceptions.WordplayInjectionException
+import com.github.rskupnik.output.WordplayOutput
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -95,9 +96,9 @@ class WordplayInjectionTest extends Specification {
 
     def "should parse internal injection embedded in external injection"() {
         given:
-        String input = "The sky was {> sky}.\n"
-                        +"\$\n"
-                        +"> 0 clear"
+        String input = "The sky was {> sky}.\n"+
+                        "\$\n"+
+                        "> 0 clear"
 
         when:
         wordplay.inject("sky", "{> 0}")
@@ -122,9 +123,9 @@ class WordplayInjectionTest extends Specification {
     //region Internal Injection
     def "should parse internal injection"() {
         given:
-        String input = "The sky was {> 0}.\n"
-                        +"\$\n"
-                        +"> 0 clear"
+        String input = "The sky was {> 0}.\n"+
+                        "\$\n"+
+                        "> 0 clear"
 
         when:
         WordplayOutput output = wordplay.process(input)
@@ -135,10 +136,10 @@ class WordplayInjectionTest extends Specification {
 
     def "should parse more than one internal injection"() {
         given:
-        String input = "The sky was {> 0} on that {> 1}.\n"
-                        +"\$\n"
-                        +"> 0 clear\n"
-                        +"> 1 day"
+        String input = "The sky was {> 0} on that {> 1}.\n"+
+                        "\$\n"+
+                        "> 0 clear\n"+
+                        "> 1 day"
 
         when:
         WordplayOutput output = wordplay.process(input)
@@ -149,10 +150,10 @@ class WordplayInjectionTest extends Specification {
 
     def "should parse nested internal injection"() {
         given:
-        String input = "The sky was {> 0}.\n"
-                        +"\$\n"
-                        +"> 0 {> 1}\n"
-                        +"> 1 clear"
+        String input = "The sky was {> 0}.\n"+
+                        "\$\n"+
+                        "> 0 {> 1}\n"+
+                        "> 1 clear"
 
         when:
         WordplayOutput output = wordplay.process(input)
@@ -163,10 +164,10 @@ class WordplayInjectionTest extends Specification {
 
     def "should parse nested internal injection with back-reference"() {
         given:
-        String input = "The sky was {> 1}.\n"
-                        +"\$\n"
-                        +"> 0 clear\n"
-                        +"> 1 {> 0}"
+        String input = "The sky was {> 1}.\n"+
+                        "\$\n"+
+                        "> 0 clear\n"+
+                        "> 1 {> 0}"
 
         when:
         WordplayOutput output = wordplay.process(input)
@@ -177,10 +178,10 @@ class WordplayInjectionTest extends Specification {
 
     def "should parse internal injection embedded in ternary expression"() {
         given:
-        String input = "The weather was {weather_sunny ? {> 0} | {> 1}}.\n"
-                        +"\$\n"
-                        +"> 0 sunny\n"
-                        +"> 1 rainy"
+        String input = "The weather was {weather_sunny ? {> 0} | {> 1}}.\n"+
+                        "\$\n"+
+                        "> 0 sunny\n"+
+                        "> 1 rainy"
 
         when:
         wordplay.setVariable("weather_sunny", true)
@@ -192,9 +193,9 @@ class WordplayInjectionTest extends Specification {
 
     def "should parse ternary expression injected internally"() {
         given:
-        String input = "The weather was {> 0}.\n"
-                        +"\$\n"
-                        +"> 0 {weather_sunny ? sunny | rainy}"
+        String input = "The weather was {> 0}.\n"+
+                        "\$\n"+
+                        "> 0 {weather_sunny ? sunny | rainy}";
 
         when:
         wordplay.setVariable("weather_sunny", true)
@@ -206,9 +207,9 @@ class WordplayInjectionTest extends Specification {
 
     def "should parse external injection embedded in internal injection"() {
         given:
-        String input = "The sky was {> 0}.\n"
-                        +"\$\n"
-                        +"> 0 {> sky}"
+        String input = "The sky was {> 0}.\n"+
+                        "\$\n"+
+                        "> 0 {> sky}"
 
         when:
         wordplay.inject("sky", "clear")
@@ -220,8 +221,8 @@ class WordplayInjectionTest extends Specification {
 
     def "should throw exception when internal injection object is not provided"() {
         given:
-        String input = "The sky was {> 0}.\n"
-                        +"\$\n"
+        String input = "The sky was {> 0}.\n"+
+                        "\$\n"
 
         when:
         wordplay.process(input)

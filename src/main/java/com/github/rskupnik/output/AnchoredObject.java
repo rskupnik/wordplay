@@ -1,13 +1,13 @@
-package com.github.rskupnik.objects;
+package com.github.rskupnik.output;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public final class AnchoredObject {
 
-    private String text;
-    private int position;
-    private Map<String, Object> parameters = new HashMap<>();
+    private final String text;
+    private final int position;
+    private final Map<String, Object> parameters = new HashMap<>();
 
     AnchoredObject(String text, int position) {
         this.text = text;
@@ -16,7 +16,7 @@ public final class AnchoredObject {
 
     AnchoredObject(String text, int position, Map<String, Object> parameters) {
         this(text, position);
-        this.parameters = parameters;
+        this.parameters.putAll(parameters);
     }
 
     public String getText() {
