@@ -17,22 +17,20 @@ class WordplayInjectionTest extends Specification {
     @Unroll
     def "should parse external injection: inj={>#_inj_}"() {
         given:
-        String input = "There was a {>" + _inj_ + "} standing at the wall."
+        String input = "There was a {> " + _inj_ + "} standing at the wall."
 
         when:
         wordplay.inject(_inj_, "tired guard")
         WordplayOutput output = wordplay.process(input)
 
         then:
-        boolean result = output.getText() == "There was a tired guard standing at the wall."
-        result == _expected_
+        output.getText() == "There was a tired guard standing at the wall."
 
         where:
         _expected_ | _inj_
-        true       | " guard"
-        true       | " guard that's tired"
-        true       | " this is a very long variable name, no one should do this"
         true       | "guard"
+        true       | "guard_thats_tired"
+        true       | "this_is_a_very_long_variable_name_no_one_should_do_this"
     }
 
     def "should parse more than one external injection"() {

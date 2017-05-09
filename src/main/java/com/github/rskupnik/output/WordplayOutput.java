@@ -14,9 +14,10 @@ public final class WordplayOutput {
         this.text = text;
     }
 
-    public WordplayOutput(String text, List<AnchoredObject> anchoredObjects) {
+    public WordplayOutput(String text, List<AnchoredObject> anchoredObjects, List<MetaObject> metaObjects) {
         this(text);
         this.anchoredObjects.addAll(anchoredObjects);
+        this.metaObjects.addAll(metaObjects);
     }
 
     public final String getText() {
