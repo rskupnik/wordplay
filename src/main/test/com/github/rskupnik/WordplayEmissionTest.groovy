@@ -152,7 +152,7 @@ class WordplayEmissionTest extends Specification {
         given:
         String input = "Some random text.\n" +
                 "\$\n" +
-                "< map " + _obj_
+                "<m map " + _obj_
 
         when:
         WordplayOutput output = wordplay.process(input)
@@ -170,9 +170,9 @@ class WordplayEmissionTest extends Specification {
         where:
         _obj_                            | _value1_  | _value2_
         "key:astring|key2:anotherstring" | "astring" | "anotherstring"
-        "key:false|key2:true"            | false     | true
-        "key:5|key2:-2154"               | 5         | -2154
-        "key:null|key2:0"                | "null"    | 0
+        "key:false|key2:true"            | "false"   | "true"
+        "key:5|key2:-2154"               | "5"       | "-2154"
+        "key:null|key2:0"                | "null"    | "0"
     }
 
     @Unroll
@@ -198,9 +198,9 @@ class WordplayEmissionTest extends Specification {
         where:
         _obj_        | _value1_ | _value2_
         "one,two"    | "one"    | "two"
-        "true,false" | true     | false
-        "5,-124124"  | 5        | -124124
-        "null,0"     | "null"   | 0
+        "true,false" | "true"   | "false"
+        "5,-124124"  | "5"      | "-124124"
+        "null,0"     | "null"   | "0"
     }
 
     @Unroll
@@ -219,11 +219,11 @@ class WordplayEmissionTest extends Specification {
         _exception_             | _obj_
         WordplaySyntaxException | " key,value"
         WordplaySyntaxException | "< key,value"
-        WordplaySyntaxException | "< list key;value|key2;value2"
-        WordplaySyntaxException | "< list key:value|key2;value2"
-        WordplaySyntaxException | "< list keyvalue|key2value2"
-        WordplaySyntaxException | "list keyvalue|key2value2"
-        WordplaySyntaxException | " list keyvalue|key2value2"
+        WordplaySyntaxException | "< eist key;value|key2;value2"
+        WordplaySyntaxException | "< eist key:value|key2;value2"
+        WordplaySyntaxException | "< eist keyvalue|key2value2"
+        WordplaySyntaxException | "eist keyvalue|key2value2"
+        WordplaySyntaxException | " eist keyvalue|key2value2"
     }
     //endregion
 }

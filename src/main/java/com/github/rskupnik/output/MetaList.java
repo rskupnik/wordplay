@@ -6,14 +6,14 @@ import java.util.List;
 
 public final class MetaList extends MetaObject {
 
-    private final List<Object> data = new ArrayList<>();
+    private final List<String> data = new ArrayList<>();
 
-    MetaList(String id, List<Object> data) {
+    public MetaList(String id, List<String> data) {
         super(id);
         this.data.addAll(data);
     }
 
-    public final List<Object> getData() {
+    public final List<String> getData() {
         return Collections.unmodifiableList(data);
     }
 
@@ -26,10 +26,15 @@ public final class MetaList extends MetaObject {
     }
 
     public final int getInt(int index) {
-        return (int) data.get(index);
+        Integer out = null;
+        try {
+            out = Integer.parseInt(data.get(index));
+        } finally {
+            return out;
+        }
     }
 
     public final boolean getBool(int index) {
-        return (boolean) data.get(index);
+        return Boolean.parseBoolean(data.get(index));
     }
 }

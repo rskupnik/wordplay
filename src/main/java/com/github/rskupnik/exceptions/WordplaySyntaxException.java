@@ -1,4 +1,4 @@
 package com.github.rskupnik.exceptions;
 
-public class WordplaySyntaxException extends WordplayProcessingException {
+public class WordplaySyntaxException extends WordplayException {
 }

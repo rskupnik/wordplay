@@ -1,4 +1,4 @@
-package com.github.rskupnik.internal.injection;
+package com.github.rskupnik.internal.processors;
 
 import com.github.rskupnik.exceptions.WordplayInjectionException;
 import com.github.rskupnik.internal.expressions.InjectionExpression;
@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class Injector {
+public final class InjectionProcessor {
 
     private static final Pattern PATTERN = Pattern.compile("\\{>\\s?(\\w*)\\s?}");
 

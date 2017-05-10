@@ -7,30 +7,35 @@ import java.util.Map;
 
 public final class MetaMap extends MetaObject {
 
-    private final Map<String, Object> data = new HashMap<>();
+    private final Map<String, String> data = new HashMap<>();
 
-    MetaMap(String id, Map<String, Object> data) {
+    public MetaMap(String id, Map<String, String> data) {
         super(id);
         this.data.putAll(data);
     }
 
-    public final Map<String, Object> getData() {
+    public final Map<String, String> getData() {
         return Collections.unmodifiableMap(data);
     }
 
-    public final Object getObject(String key) {
-        return data.get(key);
+    public final Object getObject(int index) {
+        return data.get(index);
     }
 
     public final String getString(String key) {
         return (String) data.get(key);
     }
 
-    public final int getInt(String key) {
-        return (int) data.get(key);
+    public final Integer getInt(String key) {
+        Integer out = null;
+        try {
+            out = Integer.parseInt(data.get(key));
+        } finally {
+            return out;
+        }
     }
 
     public final boolean getBool(String key) {
-        return (boolean) data.get(key);
+        return Boolean.parseBoolean(data.get(key));
     }
 }
