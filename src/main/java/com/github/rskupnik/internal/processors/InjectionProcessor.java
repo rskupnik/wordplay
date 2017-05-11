@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public final class InjectionProcessor {
 
-    private static final Pattern PATTERN = Pattern.compile("\\{>\\s?(\\w*)\\s?}");
+    private static final Pattern PATTERN = Pattern.compile("\\{>\\s?(\\w+)\\s?}");
 
     private int expressionsProcessedNumber;
 

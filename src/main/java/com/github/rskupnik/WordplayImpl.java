@@ -4,6 +4,7 @@ import com.github.rskupnik.exceptions.WordplayException;
 import com.github.rskupnik.internal.expressions.ExpressionFinder;
 import com.github.rskupnik.internal.processors.CodeProcessor;
 import com.github.rskupnik.internal.processors.InjectionProcessor;
+import com.github.rskupnik.internal.processors.TernaryProcessor;
 import com.github.rskupnik.output.AnchoredObject;
 import com.github.rskupnik.output.MetaObject;
 import com.github.rskupnik.output.WordplayOutput;
@@ -17,13 +18,16 @@ public class WordplayImpl implements Wordplay {
     private ExpressionFinder expressionFinder = new ExpressionFinder();
     private InjectionProcessor injectionProcessor = new InjectionProcessor();
     private CodeProcessor codeProcessor = new CodeProcessor();
+    private TernaryProcessor ternaryProcessor = new TernaryProcessor();
 
     private Map<String, Boolean> booleanVariablesMap = new HashMap<>();
+    private Map<String, String> variablesMap = new HashMap<>();
     private Map<String, String> injectedObjects = new HashMap<>();
 
     @Override
     public WordplayOutput process(String input) throws WordplayException {
         //region Process Code Section
+        // Stripped text | A list of internal injections in the key-value pair format | A list of emitted objects
         Triplet<String, ArrayList<Pair<String, String>>, ArrayList<MetaObject>> codeProcessingOutput =
                 codeProcessor.parse(input);
 
@@ -46,14 +50,18 @@ public class WordplayImpl implements Wordplay {
         //endregion
 
         //region Processing
-        // Process ternary expressions
+        String processedTernary = processedInjection;
+        do {
+            processedTernary = ternaryProcessor.process(processedTernary, booleanVariablesMap, variablesMap);
+        } while (ternaryProcessor.getExpressionsProcessedNumber() != 0);
+        ternaryProcessor.checkInvalidPatternsRemaining(processedTernary);
         //endregion
 
         //region Emission
 
         //endregion
 
-        return new WordplayOutput(processedInjection, new ArrayList<AnchoredObject>(), new ArrayList<MetaObject>());
+        return new WordplayOutput(processedTernary, new ArrayList<AnchoredObject>(), new ArrayList<MetaObject>());
     }
 
     @Override
@@ -68,7 +76,7 @@ public class WordplayImpl implements Wordplay {
 
     @Override
     public void setVariable(String var, String value) {
-
+        variablesMap.put(var, value);
     }
 
     @Override

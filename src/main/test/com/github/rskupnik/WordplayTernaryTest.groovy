@@ -3,6 +3,7 @@ package com.github.rskupnik
 import com.github.rskupnik.exceptions.WordplayProcessingException
 import com.github.rskupnik.exceptions.WordplaySyntaxException
 import com.github.rskupnik.output.WordplayOutput
+import org.junit.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -53,7 +54,7 @@ class WordplayTernaryTest extends Specification {
         WordplayOutput output = wordplay.process(script)
 
         then:
-        output.getText.equals("It was a sunny day.")
+        output.getText().equals("It was a sunny day.")
     }
 
     def "should resolve nested shorthand ternary expression"() {
@@ -66,7 +67,7 @@ class WordplayTernaryTest extends Specification {
         WordplayOutput output = wordplay.process(script)
 
         then:
-        output.getText.equals("The color was light blue.")
+        output.getText().equals("The color was light blue.")
     }
 
     def "should not process nested shorthand ternary expression if not touched"() {
@@ -78,7 +79,7 @@ class WordplayTernaryTest extends Specification {
         WordplayOutput output = wordplay.process(script)
 
         then:
-        output.getText.equals("The color was red.")
+        output.getText().equals("The color was red.")
 
         // If the nested expression was evaluated, exception would be thrown due to missing light variable
     }
@@ -106,7 +107,7 @@ class WordplayTernaryTest extends Specification {
         WordplayOutput output = wordplay.process(script)
 
         then:
-        output.getText.equals(_result_)
+        output.getText().equals(_result_)
 
         where:
         _result_                 | _weatherVar_
@@ -127,7 +128,7 @@ class WordplayTernaryTest extends Specification {
         WordplayOutput output = wordplay.process(script)
 
         then:
-        output.getText.equals(_result_)
+        output.getText().equals(_result_)
 
         where:
         _result_                          | _colorVar_ | _shadeVar_
@@ -149,7 +150,7 @@ class WordplayTernaryTest extends Specification {
         WordplayOutput output = wordplay.process(script)
 
         then:
-        output.getText.equals("The color was red.")
+        output.getText().equals("The color was red.")
 
         // If the nested expression was evaluated, exception would be thrown due to missing light variable
     }
