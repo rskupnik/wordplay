@@ -50,6 +50,7 @@ public class WordplayImpl implements Wordplay {
         //endregion
 
         //region Processing
+        // Perform ternary/matching until no ternary/matching expressions are found
         String processedTernary = processedInjection;
         do {
             processedTernary = ternaryProcessor.process(processedTernary, booleanVariablesMap, variablesMap);
