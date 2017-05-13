@@ -18,12 +18,12 @@ public final class MetaMap extends MetaObject {
         return Collections.unmodifiableMap(data);
     }
 
-    public final Object getObject(int index) {
-        return data.get(index);
+    public final Object getObject(String key) {
+        return data.get(key);
     }
 
     public final String getString(String key) {
-        return (String) data.get(key);
+        return data.get(key);
     }
 
     public final Integer getInt(String key) {

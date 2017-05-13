@@ -3,6 +3,7 @@ package com.github.rskupnik;
 import com.github.rskupnik.exceptions.WordplayException;
 import com.github.rskupnik.internal.expressions.ExpressionFinder;
 import com.github.rskupnik.internal.processors.CodeProcessor;
+import com.github.rskupnik.internal.processors.EmissionProcessor;
 import com.github.rskupnik.internal.processors.InjectionProcessor;
 import com.github.rskupnik.internal.processors.TernaryProcessor;
 import com.github.rskupnik.output.AnchoredObject;
@@ -19,6 +20,7 @@ public class WordplayImpl implements Wordplay {
     private InjectionProcessor injectionProcessor = new InjectionProcessor();
     private CodeProcessor codeProcessor = new CodeProcessor();
     private TernaryProcessor ternaryProcessor = new TernaryProcessor();
+    private EmissionProcessor emissionProcessor = new EmissionProcessor();
 
     private Map<String, Boolean> booleanVariablesMap = new HashMap<>();
     private Map<String, String> variablesMap = new HashMap<>();
@@ -39,6 +41,7 @@ public class WordplayImpl implements Wordplay {
         }
 
         input = codeProcessingOutput.getValue0();   // Drop the code part, leave only data
+        List<MetaObject> metaObjects = codeProcessingOutput.getValue2();
         //endregion
 
         //region Injection
@@ -55,14 +58,26 @@ public class WordplayImpl implements Wordplay {
         do {
             processedTernary = ternaryProcessor.process(processedTernary, booleanVariablesMap, variablesMap);
         } while (ternaryProcessor.getExpressionsProcessedNumber() != 0);
-        ternaryProcessor.checkInvalidPatternsRemaining(processedTernary);
+        //ternaryProcessor.checkInvalidPatternsRemaining(processedTernary);
         //endregion
 
         //region Emission
+        String processedEmission = processedTernary;
+        List<Triplet<String, Integer, Map<String, String>>> anchoredObjectComponents = new ArrayList<>();
+        do {
+            Pair<String, List<Triplet<String, Integer, Map<String, String>>>> emissionOutput =
+                    emissionProcessor.processAnchoredObjects(processedEmission);
+            processedEmission = emissionOutput.getValue0();
+            anchoredObjectComponents.addAll(emissionOutput.getValue1());
+        } while (emissionProcessor.getExpressionsProcessedNumber() != 0);
 
+        Pair<String, List<AnchoredObject>> emissionFinalOutput =
+                emissionProcessor.constructAnchoredObjects(processedEmission, anchoredObjectComponents);
+        String processedFinalOutput = emissionFinalOutput.getValue0();
+        List<AnchoredObject> anchoredObjects = emissionFinalOutput.getValue1();
         //endregion
 
-        return new WordplayOutput(processedTernary, new ArrayList<AnchoredObject>(), new ArrayList<MetaObject>());
+        return new WordplayOutput(processedFinalOutput, anchoredObjects, metaObjects);
     }
 
     @Override

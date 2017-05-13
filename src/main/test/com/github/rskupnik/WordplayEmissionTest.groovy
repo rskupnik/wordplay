@@ -47,13 +47,13 @@ class WordplayEmissionTest extends Specification {
         output.getText() == "The magic stone was vibrating slightly."
         List<AnchoredObject> anchoredObjects = output.getAnchoredObjects()
         anchoredObjects.size() == 2
-        AnchoredObject anchoredObject = anchoredObjects.get(0)
+        AnchoredObject anchoredObject = anchoredObjects.get(1)
         anchoredObject.getText() == "vibrating"
         anchoredObject.getStringParam("effect") == "vibrate"
         anchoredObject.getStringParam("tint") == "blue"
-        anchoredObject anchoredObject = anchoredObjects.get(1)
-        anchoredObject.getText() == "stone"
-        anchoredObject.getStringParam("tint") == "grey"
+        AnchoredObject anchoredObject2 = anchoredObjects.get(0)
+        anchoredObject2.getText() == "stone"
+        anchoredObject2.getStringParam("tint") == "grey"
     }
 
     def "should emit an anchored object inside ternary expression"() {
@@ -123,7 +123,7 @@ class WordplayEmissionTest extends Specification {
     }
 
     @Unroll
-    def "should throw exception when syntax is invalid: expr=#_expr_"() {
+    def "should ignore when syntax is invalid: expr=#_expr_"() {
         given:
         String input = "The magic stone was " + _expr_ + " slightly."
 
@@ -131,7 +131,7 @@ class WordplayEmissionTest extends Specification {
         wordplay.process(input)
 
         then:
-        thrown(_exception_)
+        notThrown(_exception_)
 
         where:
         _exception_             | _expr_
@@ -164,8 +164,8 @@ class WordplayEmissionTest extends Specification {
         MetaObject mobj = metaObjects.get(0)
         mobj instanceof MetaMap
         MetaMap mmap = (MetaMap) mobj
-        mmap.getObject("key").equals(_value1_)
-        mmap.getObject("key2").equals(_value2_)
+        mmap.getString("key").equals(_value1_)
+        mmap.getString("key2").equals(_value2_)
 
         where:
         _obj_                            | _value1_  | _value2_
@@ -192,15 +192,15 @@ class WordplayEmissionTest extends Specification {
         MetaObject mobj = metaObjects.get(0)
         mobj instanceof MetaList
         MetaList mlist = (MetaList) mobj
-        mlist.getObject(0).equals(_value1_)
-        mlist.getObject(1).equals(_value2_)
+        mlist.getString(0).equals(_value1_)
+        mlist.getString(1).equals(_value2_)
 
         where:
         _obj_        | _value1_ | _value2_
-        "one,two"    | "one"    | "two"
-        "true,false" | "true"   | "false"
-        "5,-124124"  | "5"      | "-124124"
-        "null,0"     | "null"   | "0"
+        "one|two"    | "one"    | "two"
+        "true|false" | "true"   | "false"
+        "5|-124124"  | "5"      | "-124124"
+        "null|0"     | "null"   | "0"
     }
 
     @Unroll

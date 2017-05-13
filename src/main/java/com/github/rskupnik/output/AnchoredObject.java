@@ -7,14 +7,14 @@ public final class AnchoredObject {
 
     private final String text;
     private final int position;
-    private final Map<String, Object> parameters = new HashMap<>();
+    private final Map<String, String> parameters = new HashMap<>();
 
-    AnchoredObject(String text, int position) {
+    public AnchoredObject(String text, int position) {
         this.text = text;
         this.position = position;
     }
 
-    AnchoredObject(String text, int position, Map<String, Object> parameters) {
+    public AnchoredObject(String text, int position, Map<String, String> parameters) {
         this(text, position);
         this.parameters.putAll(parameters);
     }
@@ -32,14 +32,19 @@ public final class AnchoredObject {
     }
 
     public boolean getBoolParam(String key) {
-        return (boolean) parameters.get(key);
+        return Boolean.parseBoolean(parameters.get(key));
     }
 
     public String getStringParam(String key) {
         return (String) parameters.get(key);
     }
 
-    public int getIntParam(String key) {
-        return (int) parameters.get(key);
+    public Integer getIntParam(String key) {
+        Integer out = null;
+        try {
+            out = Integer.parseInt(parameters.get(key));
+        } finally {
+            return out;
+        }
     }
 }

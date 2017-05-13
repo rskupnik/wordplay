@@ -22,7 +22,7 @@ public final class MetaList extends MetaObject {
     }
 
     public final String getString(int index) {
-        return (String) data.get(index);
+        return data.get(index);
     }
 
     public final int getInt(int index) {

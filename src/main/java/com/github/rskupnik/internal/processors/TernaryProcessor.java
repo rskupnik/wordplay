@@ -2,7 +2,7 @@ package com.github.rskupnik.internal.processors;
 
 import com.github.rskupnik.exceptions.WordplayProcessingException;
 import com.github.rskupnik.exceptions.WordplaySyntaxException;
-import javafx.util.Pair;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,8 +67,8 @@ public final class TernaryProcessor {
             if (payloadFalse != null && !payloadFalse.equals(" ")) { // There are more options to consider
                 List<Pair<String, String>> matchPairs = extractMatchPairs(payloadFalse);
                 for (Pair<String, String> matchPair : matchPairs) {
-                    if (expectedValue.equals(matchPair.getKey())) {
-                        chosen = matchPair.getValue();
+                    if (expectedValue.equals(matchPair.getValue0())) {
+                        chosen = matchPair.getValue1();
                         break;
                     }
                 }
