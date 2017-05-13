@@ -100,7 +100,7 @@ class WordplayTernaryTest extends Specification {
     @Unroll
     def "should resolve full ternary expression when given variable: #_weatherVar_"() {
         given:
-        String script = "The weather was {weather:sunny ? sunny |:rainy rainy | fine}."
+        String script = "The weather was {weather:sunny sunny |:rainy rainy | fine}."
 
         when:
         wordplay.setVariable("weather", _weatherVar_)
@@ -119,7 +119,7 @@ class WordplayTernaryTest extends Specification {
     @Unroll
     def "should resolve full ternary expression with multiple options when given variable: #_weatherVar_"() {
         given:
-        String script = "The weather was {weather:sunny ? sunny |:rainy rainy |:cloudy cloudy | fine}."
+        String script = "The weather was {weather:sunny sunny |:rainy rainy |:cloudy cloudy | fine}."
 
         when:
         wordplay.setVariable("weather", _weatherVar_)
@@ -139,7 +139,7 @@ class WordplayTernaryTest extends Specification {
     @Unroll
     def "should resolve full nested ternary expression with multiple options: color:#_colorVar_, shade:#_shadeVar_"() {
         given:
-        String script = "The color was {color:blue ? {shade:light ? light |:dark dark |:dim dim | unspecified} blue |:green green | red}."
+        String script = "The color was {color:blue {shade:light light |:dark dark |:dim dim | unspecified} blue |:green green | red}."
 
         when:
         wordplay.setVariable("color", _colorVar_)
@@ -164,7 +164,7 @@ class WordplayTernaryTest extends Specification {
     @Unroll
     def "should resolve full nested ternary expression: color:#_colorVar_, shade:#_shadeVar_"() {
         given:
-        String script = "The color was {color:blue ? {shade:light ? light |:dark dark | unspecified} blue | red}."
+        String script = "The color was {color:blue {shade:light light |:dark dark | unspecified} blue | red}."
 
         when:
         wordplay.setVariable("color", _colorVar_)

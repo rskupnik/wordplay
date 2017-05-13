@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public final class TernaryProcessor {
 
     private static final Pattern PATTERN_SHORT = Pattern.compile("\\{\\s*(\\w+)\\s*\\?\\s*(.+)\\s*\\|\\s*(.+)\\s*}");
-    private static final Pattern PATTERN_FULL = Pattern.compile("\\{\\s*((\\w+):(\\w+))\\s*\\?\\s*([^{}\\\\|]+)((\\s*\\|:\\w+\\s*[^\\\\|]+\\s*)*)(\\s*\\|\\s*([^\\\\|]+)\\s*)}");
+    private static final Pattern PATTERN_FULL = Pattern.compile("\\{\\s*((\\w+):(\\w+))\\s+([^{}\\\\|]+)((\\s*\\|:\\w+\\s*[^\\\\|]+\\s*)*)(\\s*\\|\\s*([^\\\\|]+?)})");
     private static final Pattern PATTERN_SUBGROUP = Pattern.compile("\\|:(\\w+)\\s*([^\\\\|]+)\\s*(?=\\|)?");
     private static final Pattern PATTERN_REMAINING = Pattern.compile("\\{[^><].*}");
 
