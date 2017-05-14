@@ -1,4 +1,4 @@
-package com.github.rskupnik.output;
+package com.github.rskupnik.wordplay.output;
 
 import java.util.Collection;
 

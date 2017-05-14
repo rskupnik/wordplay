@@ -1,13 +1,11 @@
-package com.github.rskupnik
+package com.github.rskupnik.wordplay
 
-import com.github.rskupnik.exceptions.WordplayProcessingException
-import com.github.rskupnik.exceptions.WordplaySyntaxException
-import com.github.rskupnik.output.WordplayOutput
-import org.junit.Ignore
+import com.github.rskupnik.wordplay.exceptions.WordplayProcessingException
+import com.github.rskupnik.wordplay.output.WordplayOutput
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class WordplayTernaryTest extends Specification {
+class WordplayExpressionTest extends Specification {
 
     private final Wordplay wordplay = new WordplayImpl();
 
@@ -15,9 +13,9 @@ class WordplayTernaryTest extends Specification {
         wordplay.reset()
     }
 
-    //region Shorthand Ternary Expressions
+    //region Ternary Expressions
     @Unroll
-    def "should resolve shorthand ternary expression given variable: #_var_"() {
+    def "should resolve ternary expression given variable: #_var_"() {
         given:
         String script = "It was a {weather_sunny ? sunny | rainy} day."
 
@@ -34,7 +32,7 @@ class WordplayTernaryTest extends Specification {
         "It was a rainy day." | false
     }
 
-    def "should throw SyntaxException if shorthand ternary expression is invalid"() {
+    def "should throw SyntaxException if ternary expression is invalid"() {
         given:
         String script = "It was a {weather_sunny ?? sunny | rainy | cloudy} day."
 
@@ -45,7 +43,7 @@ class WordplayTernaryTest extends Specification {
         thrown(WordplayProcessingException)
     }
 
-    def "should resolve shorthand ternary expression with a space near | symbol"() {
+    def "should resolve ternary expression with a space near | symbol"() {
         given:
         String script = "It was a {weather_sunny ? sunny  |  rainy}day."
 
@@ -57,7 +55,7 @@ class WordplayTernaryTest extends Specification {
         output.getText().equals("It was a sunny day.")
     }
 
-    def "should resolve nested shorthand ternary expression"() {
+    def "should resolve nested ternary expression"() {
         given:
         String script = "The color was {blue ? {light ? light | dark} blue | red}."
 
@@ -70,7 +68,7 @@ class WordplayTernaryTest extends Specification {
         output.getText().equals("The color was light blue.")
     }
 
-    def "should not process nested shorthand ternary expression if not touched"() {
+    def "should not process nested ternary expression if not touched"() {
         given:
         String script = "The color was {blue ? {light ? light | dark} blue | red}."
 
@@ -84,7 +82,7 @@ class WordplayTernaryTest extends Specification {
         // If the nested expression was evaluated, exception would be thrown due to missing light variable
     }
 
-    def "should throw exception if missing required variable in shorthand ternary expression"() {
+    def "should throw exception if missing required variable in ternary expression"() {
         given:
         String script = "The color was {blue ? blue | red}."
 
@@ -96,9 +94,9 @@ class WordplayTernaryTest extends Specification {
     }
     //endregion
 
-    //region Full Ternary Expressions
+    //region Matching Expressions
     @Unroll
-    def "should resolve full ternary expression when given variable: #_weatherVar_"() {
+    def "should resolve matching expression when given variable: #_weatherVar_"() {
         given:
         String script = "The weather was {weather:sunny sunny |:rainy rainy | fine}."
 
@@ -117,7 +115,7 @@ class WordplayTernaryTest extends Specification {
     }
 
     @Unroll
-    def "should resolve full ternary expression with multiple options when given variable: #_weatherVar_"() {
+    def "should resolve matching expression with multiple options when given variable: #_weatherVar_"() {
         given:
         String script = "The weather was {weather:sunny sunny |:rainy rainy |:cloudy cloudy | fine}."
 
@@ -137,7 +135,7 @@ class WordplayTernaryTest extends Specification {
     }
 
     @Unroll
-    def "should resolve full nested ternary expression with multiple options: color:#_colorVar_, shade:#_shadeVar_"() {
+    def "should resolve nested matching expression with multiple options: color:#_colorVar_, shade:#_shadeVar_"() {
         given:
         String script = "The color was {color:blue {shade:light light |:dark dark |:dim dim | unspecified} blue |:green green | red}."
 
@@ -162,7 +160,7 @@ class WordplayTernaryTest extends Specification {
     }
 
     @Unroll
-    def "should resolve full nested ternary expression: color:#_colorVar_, shade:#_shadeVar_"() {
+    def "should resolve nested matching expression: color:#_colorVar_, shade:#_shadeVar_"() {
         given:
         String script = "The color was {color:blue {shade:light light |:dark dark | unspecified} blue | red}."
 

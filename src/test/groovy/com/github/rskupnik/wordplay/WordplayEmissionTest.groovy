@@ -1,11 +1,11 @@
-package com.github.rskupnik
+package com.github.rskupnik.wordplay
 
-import com.github.rskupnik.exceptions.WordplaySyntaxException
-import com.github.rskupnik.output.AnchoredObject
-import com.github.rskupnik.output.MetaList
-import com.github.rskupnik.output.MetaMap
-import com.github.rskupnik.output.MetaObject
-import com.github.rskupnik.output.WordplayOutput
+import com.github.rskupnik.wordplay.exceptions.WordplaySyntaxException
+import com.github.rskupnik.wordplay.output.AnchoredObject
+import com.github.rskupnik.wordplay.output.MetaList
+import com.github.rskupnik.wordplay.output.MetaMap
+import com.github.rskupnik.wordplay.output.MetaObject
+import com.github.rskupnik.wordplay.output.WordplayOutput
 import spock.lang.Specification
 import spock.lang.Unroll
 

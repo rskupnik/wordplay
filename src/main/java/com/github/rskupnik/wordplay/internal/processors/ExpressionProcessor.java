@@ -1,7 +1,7 @@
-package com.github.rskupnik.internal.processors;
+package com.github.rskupnik.wordplay.internal.processors;
 
-import com.github.rskupnik.exceptions.WordplayProcessingException;
-import com.github.rskupnik.exceptions.WordplaySyntaxException;
+import com.github.rskupnik.wordplay.exceptions.WordplayProcessingException;
+import com.github.rskupnik.wordplay.exceptions.WordplaySyntaxException;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
@@ -10,25 +10,29 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class TernaryProcessor {
+public final class ExpressionProcessor {
 
-    private static final Pattern PATTERN_SHORT = Pattern.compile("\\{\\s*(\\w+)\\s*\\?\\s*(.+)\\s*\\|\\s*(.+)\\s*}");
-    private static final Pattern PATTERN_FULL = Pattern.compile("\\{\\s*((\\w+):(\\w+))\\s+([^{}\\\\|]+)((\\s*\\|:\\w+\\s*[^\\\\|]+\\s*)*)(\\s*\\|\\s*([^\\\\|]+?)})");
+    private static final Pattern PATTERN_TERNARY = Pattern.compile("\\{\\s*(\\w+)\\s*\\?\\s*(.+)\\s*\\|\\s*(.+)\\s*}");
+    private static final Pattern PATTERN_MATCHING = Pattern.compile("\\{\\s*((\\w+):(\\w+))\\s+([^{}\\\\|]+)((\\s*\\|:\\w+\\s*[^\\\\|]+\\s*)*)(\\s*\\|\\s*([^\\\\|]+?)})");
     private static final Pattern PATTERN_SUBGROUP = Pattern.compile("\\|:(\\w+)\\s*([^\\\\|]+)\\s*(?=\\|)?");
-    private static final Pattern PATTERN_REMAINING = Pattern.compile("\\{[^><].*}");
 
     private int expressionsProcessedNumber;
 
+    /**
+     * Both Ternary and Matching expressions are processed together,
+     * because we want them to be able to nest each other.
+     * @return a String with all expressions processed and replaced
+     */
     public String process(String input, Map<String, Boolean> booleanVariables, Map<String, String> variables) throws WordplayProcessingException, WordplaySyntaxException {
         expressionsProcessedNumber = 0;
-        String output = processShorthand(input, booleanVariables);
-        output = processFull(output, variables);
+        String output = processTernary(input, booleanVariables);
+        output = processMatching(output, variables);
         return output;
     }
 
-    private String processShorthand(String input, Map<String, Boolean> booleanVariables) throws WordplayProcessingException, WordplaySyntaxException {
+    private String processTernary(String input, Map<String, Boolean> booleanVariables) throws WordplayProcessingException, WordplaySyntaxException {
         StringBuffer sb = new StringBuffer();
-        Matcher matcher = PATTERN_SHORT.matcher(input);
+        Matcher matcher = PATTERN_TERNARY.matcher(input);
         while (matcher.find()) {
             String varName = matcher.group(1);
             String valTrue = matcher.group(2);
@@ -48,9 +52,9 @@ public final class TernaryProcessor {
         return sb.toString();
     }
 
-    private String processFull(String input, Map<String, String> variables) throws WordplayProcessingException, WordplaySyntaxException {
+    private String processMatching(String input, Map<String, String> variables) throws WordplayProcessingException, WordplaySyntaxException {
         StringBuffer sb = new StringBuffer();
-        Matcher matcher = PATTERN_FULL.matcher(input);
+        Matcher matcher = PATTERN_MATCHING.matcher(input);
         while (matcher.find()) {
             String varName = matcher.group(2);
             String varValue = matcher.group(3);
@@ -96,13 +100,6 @@ public final class TernaryProcessor {
             output.add(new Pair<String, String>(varValue, payload));
         }
         return output;
-    }
-
-    public void checkInvalidPatternsRemaining(String input) throws WordplaySyntaxException {
-        Matcher matcher = PATTERN_REMAINING.matcher(input);
-        if (matcher.find()) {
-            throw new WordplaySyntaxException();
-        }
     }
 
     public int getExpressionsProcessedNumber() {

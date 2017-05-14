@@ -1,7 +1,7 @@
-package com.github.rskupnik;
+package com.github.rskupnik.wordplay;
 
-import com.github.rskupnik.exceptions.WordplayException;
-import com.github.rskupnik.output.WordplayOutput;
+import com.github.rskupnik.wordplay.exceptions.WordplayException;
+import com.github.rskupnik.wordplay.output.WordplayOutput;
 
 public interface Wordplay {
     WordplayOutput process(String input) throws WordplayException;

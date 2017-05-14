@@ -1,7 +1,7 @@
-package com.github.rskupnik
+package com.github.rskupnik.wordplay
 
-import com.github.rskupnik.exceptions.WordplayInjectionException
-import com.github.rskupnik.output.WordplayOutput
+import com.github.rskupnik.wordplay.exceptions.WordplayInjectionException
+import com.github.rskupnik.wordplay.output.WordplayOutput
 import spock.lang.Specification
 import spock.lang.Unroll
 

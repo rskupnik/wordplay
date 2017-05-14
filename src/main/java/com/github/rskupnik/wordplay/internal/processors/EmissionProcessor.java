@@ -1,10 +1,10 @@
-package com.github.rskupnik.internal.processors;
+package com.github.rskupnik.wordplay.internal.processors;
 
-import com.github.rskupnik.exceptions.WordplaySyntaxException;
-import com.github.rskupnik.output.AnchoredObject;
-import com.github.rskupnik.output.MetaList;
-import com.github.rskupnik.output.MetaMap;
-import com.github.rskupnik.output.MetaObject;
+import com.github.rskupnik.wordplay.exceptions.WordplaySyntaxException;
+import com.github.rskupnik.wordplay.output.AnchoredObject;
+import com.github.rskupnik.wordplay.output.MetaList;
+import com.github.rskupnik.wordplay.output.MetaMap;
+import com.github.rskupnik.wordplay.output.MetaObject;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
@@ -18,11 +18,19 @@ public final class EmissionProcessor {
     private static final Pattern PATTERN_SUBGROUP = Pattern.compile("(\\w+):(\\w+)(?=\\|)?");
     private static final Pattern PATTERN_TOKEN = Pattern.compile("\\$@s\\d+\\s");
     private static final String TOKEN_START = "$@s";
-    private static final String TOKEN_END = "$@e";
 
     private int internalIndex = 0;
     private int expressionsProcessedNumber = 0;
 
+    /**
+     * The second part of processing emitted objects.
+     * Takes the object components returned by processAnchoredObjects
+     * and constructs a list of actual AnchoredObject objects.
+     * This needs to be a two-step process because the AnchoredObjects
+     * have to be found and processed first and then their final positions
+     * in the final text have to be determined once the text is ready.
+     * @return a Pair with the output String and a list of AnchoredObjects
+     */
     public Pair<String, List<AnchoredObject>> constructAnchoredObjects(String input, List<Triplet<String, Integer, Map<String, String>>> objectComponents) {
         List<AnchoredObject> output = new ArrayList<>();
 
@@ -46,6 +54,15 @@ public final class EmissionProcessor {
         return new Pair<>(sb.toString(), output);
     }
 
+    /**
+     * The first part of processing emitted objects.
+     * Finds the anchored object pattern in text, splits it accordingly
+     * and returns all component needed by constructAnchoredObjects
+     * to be able to construct the actual objects while preserving their
+     * actual position in the final text.
+     * @return A Pair with the output string and a list of triplets that
+     * contain object components: text, index and a map of key-value pairs
+     */
     public Pair<String, List<Triplet<String, Integer, Map<String, String>>>> processAnchoredObjects(String input) {
         expressionsProcessedNumber = 0;
         List<Triplet<String, Integer, Map<String, String>>> objects = new ArrayList<>();

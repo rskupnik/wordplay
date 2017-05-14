@@ -1,10 +1,10 @@
-package com.github.rskupnik
+package com.github.rskupnik.wordplay
 
-import com.github.rskupnik.output.AnchoredObject
-import com.github.rskupnik.output.MetaList
-import com.github.rskupnik.output.MetaMap
-import com.github.rskupnik.output.MetaObject
-import com.github.rskupnik.output.WordplayOutput
+import com.github.rskupnik.wordplay.output.MetaObject
+import com.github.rskupnik.wordplay.output.WordplayOutput
+import com.github.rskupnik.wordplay.output.AnchoredObject
+import com.github.rskupnik.wordplay.output.MetaList
+import com.github.rskupnik.wordplay.output.MetaMap
 import spock.lang.Specification
 
 class WordplayFullTest extends Specification {

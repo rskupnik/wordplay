@@ -1,14 +1,13 @@
-package com.github.rskupnik;
+package com.github.rskupnik.wordplay;
 
-import com.github.rskupnik.exceptions.WordplayException;
-import com.github.rskupnik.internal.expressions.ExpressionFinder;
-import com.github.rskupnik.internal.processors.CodeProcessor;
-import com.github.rskupnik.internal.processors.EmissionProcessor;
-import com.github.rskupnik.internal.processors.InjectionProcessor;
-import com.github.rskupnik.internal.processors.TernaryProcessor;
-import com.github.rskupnik.output.AnchoredObject;
-import com.github.rskupnik.output.MetaObject;
-import com.github.rskupnik.output.WordplayOutput;
+import com.github.rskupnik.wordplay.exceptions.WordplayException;
+import com.github.rskupnik.wordplay.internal.processors.CodeProcessor;
+import com.github.rskupnik.wordplay.internal.processors.EmissionProcessor;
+import com.github.rskupnik.wordplay.internal.processors.ExpressionProcessor;
+import com.github.rskupnik.wordplay.internal.processors.InjectionProcessor;
+import com.github.rskupnik.wordplay.output.AnchoredObject;
+import com.github.rskupnik.wordplay.output.MetaObject;
+import com.github.rskupnik.wordplay.output.WordplayOutput;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
@@ -16,10 +15,9 @@ import java.util.*;
 
 public class WordplayImpl implements Wordplay {
 
-    private ExpressionFinder expressionFinder = new ExpressionFinder();
     private InjectionProcessor injectionProcessor = new InjectionProcessor();
     private CodeProcessor codeProcessor = new CodeProcessor();
-    private TernaryProcessor ternaryProcessor = new TernaryProcessor();
+    private ExpressionProcessor expressionProcessor = new ExpressionProcessor();
     private EmissionProcessor emissionProcessor = new EmissionProcessor();
 
     private Map<String, Boolean> booleanVariablesMap = new HashMap<>();
@@ -40,29 +38,28 @@ public class WordplayImpl implements Wordplay {
             }
         }
 
-        input = codeProcessingOutput.getValue0();   // Drop the code part, leave only data
+        String processedCodeOutput = codeProcessingOutput.getValue0();   // Drop the code part, leave only data
         List<MetaObject> metaObjects = codeProcessingOutput.getValue2();
         //endregion
 
         //region Injection
         // Perform injection until no injection expressions are found
-        String processedInjection = input;
+        String processedInjectionOutput = processedCodeOutput;
         do {
-            processedInjection = injectionProcessor.inject(processedInjection, injectedObjects);
+            processedInjectionOutput = injectionProcessor.inject(processedInjectionOutput, injectedObjects);
         } while (injectionProcessor.getExpressionsProcessedNumber() != 0);
         //endregion
 
         //region Processing
         // Perform ternary/matching until no ternary/matching expressions are found
-        String processedTernary = processedInjection;
+        String processedExpressionOutput = processedInjectionOutput;
         do {
-            processedTernary = ternaryProcessor.process(processedTernary, booleanVariablesMap, variablesMap);
-        } while (ternaryProcessor.getExpressionsProcessedNumber() != 0);
-        //ternaryProcessor.checkInvalidPatternsRemaining(processedTernary);
+            processedExpressionOutput = expressionProcessor.process(processedExpressionOutput, booleanVariablesMap, variablesMap);
+        } while (expressionProcessor.getExpressionsProcessedNumber() != 0);
         //endregion
 
         //region Emission
-        String processedEmission = processedTernary;
+        String processedEmission = processedExpressionOutput;
         List<Triplet<String, Integer, Map<String, String>>> anchoredObjectComponents = new ArrayList<>();
         do {
             Pair<String, List<Triplet<String, Integer, Map<String, String>>>> emissionOutput =
@@ -83,6 +80,8 @@ public class WordplayImpl implements Wordplay {
     @Override
     public void reset() {
         booleanVariablesMap.clear();
+        variablesMap.clear();
+        injectedObjects.clear();
     }
 
     @Override

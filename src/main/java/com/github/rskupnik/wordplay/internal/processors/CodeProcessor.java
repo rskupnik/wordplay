@@ -1,20 +1,25 @@
-package com.github.rskupnik.internal.processors;
+package com.github.rskupnik.wordplay.internal.processors;
 
-import com.github.rskupnik.exceptions.WordplaySyntaxException;
-import com.github.rskupnik.output.MetaList;
-import com.github.rskupnik.output.MetaMap;
-import com.github.rskupnik.output.MetaObject;
+import com.github.rskupnik.wordplay.exceptions.WordplaySyntaxException;
+import com.github.rskupnik.wordplay.output.MetaObject;
 import org.javatuples.Pair;
-import org.javatuples.Quartet;
 import org.javatuples.Triplet;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public final class CodeProcessor {
 
     private EmissionProcessor emissionProcessor = new EmissionProcessor();
 
+    /**
+     * Parses the code section of the script if it exists.
+     * The code section is delimited by "\n$\n" <- a new line with just the $ symbol.
+     * The code section is structured line-by-line and so it is parsed.
+     * The expected syntax is known so a WordplaySyntaxException can be thrown.
+     * @return a Triplet of: Output string with just the data section,
+     * a list of key-value pairs which represent injected objects,
+     * a list of MetaObjects which represent the emitted objects
+     */
     public Triplet<String, ArrayList<Pair<String, String>>, ArrayList<MetaObject>> parse(String input) throws WordplaySyntaxException {
         int delimIndex = input.indexOf("\n$\n");
         if (delimIndex == -1)
@@ -54,6 +59,8 @@ public final class CodeProcessor {
             case "<":   // Emission
                 output.getValue2().add(emissionProcessor.processMeta(rest));
                 break;
+            default:
+                throw new WordplaySyntaxException();
         }
     }
 }

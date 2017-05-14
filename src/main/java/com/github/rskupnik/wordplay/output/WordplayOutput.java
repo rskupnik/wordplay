@@ -1,6 +1,4 @@
-package com.github.rskupnik.output;
-
-import com.github.rskupnik.output.AnchoredObject;
+package com.github.rskupnik.wordplay.output;
 
 import java.util.*;
 
