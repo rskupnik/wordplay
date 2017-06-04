@@ -62,6 +62,21 @@
           </archive>
         </configuration>
       </plugin>
+	  
+	  <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
 
       <plugin>
         <groupId>org.codehaus.gmavenplus</groupId>
@@ -78,5 +93,13 @@
       </plugin>
     </plugins>
   </build>
+  
+  <distributionManagement>
+    <repository>
+      <id>bintray-rskupnik-maven</id>
+      <name>rskupnik-maven</name>
+      <url>https://api.bintray.com/maven/rskupnik/maven/wordplay/;publish=1</url>
+    </repository>
+  </distributionManagement>
   
 </project>
