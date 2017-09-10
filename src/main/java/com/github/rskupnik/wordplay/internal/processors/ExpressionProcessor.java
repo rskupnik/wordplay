@@ -29,9 +29,9 @@ import java.util.regex.Pattern;
 
 public final class ExpressionProcessor {
 
-    private static final Pattern PATTERN_TERNARY = Pattern.compile("\\{\\s*(\\w+)\\s*\\?\\s*(.+)\\s*\\|\\s*(.+)\\s*}");
-    private static final Pattern PATTERN_MATCHING = Pattern.compile("\\{\\s*((\\w+):(\\w+))\\s+([^{}\\\\|]+)((\\s*\\|:\\w+\\s*[^\\\\|]+\\s*)*)(\\s*\\|\\s*([^\\\\|]+?)})");
-    private static final Pattern PATTERN_SUBGROUP = Pattern.compile("\\|:(\\w+)\\s*([^\\\\|]+)\\s*(?=\\|)?");
+    private static final Pattern PATTERN_TERNARY = Pattern.compile("\\{\\s*(\\w+)\\s*\\?\\s*(.+)\\s*\\|\\s*(.+)\\s*\\}");
+    private static final Pattern PATTERN_MATCHING = Pattern.compile("\\{\\s*((\\w+):(\\w+))\\s+([^\\{\\}\\\\|]+)((\\s*\\|:\\w+\\s*[^\\\\|]+\\s*)*)(\\s*\\|\\s*([^\\\\|]+?)\\})");
+    private static final Pattern PATTERN_SUBGROUP = Pattern.compile("\\|:(\\w+)\\s*([^\\\\|]+)\\s*(\\?\\=\\|)?");
 
     private int expressionsProcessedNumber;
 
