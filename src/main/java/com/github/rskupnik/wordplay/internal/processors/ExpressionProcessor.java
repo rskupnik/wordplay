@@ -56,8 +56,10 @@ public final class ExpressionProcessor {
             String valFalse = matcher.group(3);
 
             Boolean chosenBool = booleanVariables.get(varName);
-            if (chosenBool == null)
-                throw new WordplayProcessingException();
+
+            // Assume false as default value of this variable if it's missing
+            chosenBool = chosenBool != null ? chosenBool : false;
+
             String chosen = chosenBool ? valTrue : valFalse;
             if (chosen.endsWith(" "))
                 chosen = chosen.substring(0, chosen.length() - 1);
@@ -72,7 +74,7 @@ public final class ExpressionProcessor {
     private String processMatching(String input, Map<String, String> variables) throws WordplayProcessingException, WordplaySyntaxException {
         StringBuffer sb = new StringBuffer();
         Matcher matcher = PATTERN_MATCHING.matcher(input);
-        while (matcher.find()) {
+        outer: while (matcher.find()) {
             String varName = matcher.group(2);
             String varValue = matcher.group(3);
             String payloadTrue = matcher.group(4);
@@ -80,6 +82,30 @@ public final class ExpressionProcessor {
             String payloadFallback = matcher.group(8);
 
             String expectedValue = variables.get(varName);
+            if (expectedValue == null || expectedValue.length() == 0) {
+                accept(payloadFallback, matcher, sb);
+                continue;
+            }
+
+            if (expectedValue.equals(varValue)) {
+                accept(payloadTrue, matcher, sb);
+            } else {
+                if (payloadFalse != null && payloadFalse.length() != 0) {
+                    List<Pair<String, String>> matchPairs = extractMatchPairs(payloadFalse);
+                    for (Pair<String, String> matchPair : matchPairs) {
+                        if (expectedValue.equals(matchPair.getValue0())) {
+                            String val = matchPair.getValue1();
+                            accept(val, matcher, sb);
+                            continue outer;
+                        }
+                    }
+                    accept(payloadFallback, matcher, sb);
+                } else {
+                    accept(payloadFallback, matcher, sb);
+                }
+            }
+
+            /*String expectedValue = variables.get(varName);
             if (expectedValue == null || expectedValue.equals(" "))
                 throw new WordplayProcessingException();
 
@@ -100,11 +126,20 @@ public final class ExpressionProcessor {
 
             matcher.appendReplacement(sb, chosen);
 
-            expressionsProcessedNumber++;
+            expressionsProcessedNumber++;*/
         }
         matcher.appendTail(sb);
 
         return sb.toString();
+    }
+
+    private void accept(String chosen, Matcher matcher, StringBuffer sb) {
+        if (chosen.endsWith(" "))
+            chosen = chosen.substring(0, chosen.length() - 1);
+
+        matcher.appendReplacement(sb, chosen);
+
+        expressionsProcessedNumber++;
     }
 
     private List<Pair<String, String>> extractMatchPairs(String input) {
