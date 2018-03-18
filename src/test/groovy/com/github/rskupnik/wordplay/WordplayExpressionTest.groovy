@@ -47,7 +47,6 @@ class WordplayExpressionTest extends Specification {
         _result_              | _var_
         "It was a sunny day." | true
         "It was a rainy day." | false
-        "It was a rainy day." | null
     }
 
     def "should throw SyntaxException if ternary expression is invalid"() {
@@ -130,7 +129,6 @@ class WordplayExpressionTest extends Specification {
         "The weather was sunny." | "sunny"
         "The weather was rainy." | "rainy"
         "The weather was fine."  | "unrecognized"
-        "The weather was fine."  | null
     }
 
     @Unroll
