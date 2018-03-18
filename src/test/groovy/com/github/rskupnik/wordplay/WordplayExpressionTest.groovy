@@ -49,15 +49,15 @@ class WordplayExpressionTest extends Specification {
         "It was a rainy day." | false
     }
 
-    def "should throw SyntaxException if ternary expression is invalid"() {
+    def "should correctly process a non-standard ternary expression"() {
         given:
         String script = "It was a {weather_sunny ?? sunny | rainy | cloudy} day."
 
         when:
-        wordplay.process(script)
+        WordplayOutput output = wordplay.process(script)
 
         then:
-        thrown(WordplayProcessingException)
+        output.getText().equals("It was a cloudy day.")
     }
 
     def "should resolve ternary expression with a space near | symbol"() {
