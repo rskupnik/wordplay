@@ -47,6 +47,7 @@ class WordplayExpressionTest extends Specification {
         _result_              | _var_
         "It was a sunny day." | true
         "It was a rainy day." | false
+        "It was a rainy day." | null
     }
 
     def "should throw SyntaxException if ternary expression is invalid"() {
@@ -99,15 +100,15 @@ class WordplayExpressionTest extends Specification {
         // If the nested expression was evaluated, exception would be thrown due to missing light variable
     }
 
-    def "should throw exception if missing required variable in ternary expression"() {
+    def "should default to false if missing variable in ternary expression"() {
         given:
         String script = "The color was {blue ? blue | red}."
 
         when:
-        wordplay.process(script)
+        WordplayOutput output = wordplay.process(script)
 
         then:
-        thrown(WordplayProcessingException)
+        output.getText().equals("The color was red.");
     }
     //endregion
 
@@ -129,6 +130,7 @@ class WordplayExpressionTest extends Specification {
         "The weather was sunny." | "sunny"
         "The weather was rainy." | "rainy"
         "The weather was fine."  | "unrecognized"
+        "The weather was fine."  | null
     }
 
     @Unroll
@@ -196,6 +198,17 @@ class WordplayExpressionTest extends Specification {
         "The color was unspecified blue." | "blue"     | "unspecified"
         "The color was red."              | "red"      | "unspecified"
         "The color was red."              | "unknown"  | "unspecified"
+    }
+
+    def "should default to false when missing variable in matching expression"() {
+        given:
+        String script = "The weather was {weather:sunny sunny |:rainy rainy | fine}."
+
+        when:
+        WordplayOutput output = wordplay.process(script)
+
+        then:
+        output.getText().equals("The weather was fine.")
     }
     //endregion
 }
