@@ -95,6 +95,11 @@ public class WordplayImpl implements Wordplay {
     }
 
     @Override
+    public Map<String, String> extractHeaders(String input) throws WordplayException {
+        return new HashMap<>();
+    }
+
+    @Override
     public void reset() {
         booleanVariablesMap.clear();
         variablesMap.clear();
