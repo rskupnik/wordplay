@@ -18,6 +18,7 @@
 package com.github.rskupnik.wordplay;
 
 import com.github.rskupnik.wordplay.exceptions.WordplayException;
+import com.github.rskupnik.wordplay.internal.preprocessors.HeaderPreprocessor;
 import com.github.rskupnik.wordplay.internal.processors.CodeProcessor;
 import com.github.rskupnik.wordplay.internal.processors.EmissionProcessor;
 import com.github.rskupnik.wordplay.internal.processors.ExpressionProcessor;
@@ -32,14 +33,16 @@ import java.util.*;
 
 public class WordplayImpl implements Wordplay {
 
-    private InjectionProcessor injectionProcessor = new InjectionProcessor();
-    private CodeProcessor codeProcessor = new CodeProcessor();
-    private ExpressionProcessor expressionProcessor = new ExpressionProcessor();
-    private EmissionProcessor emissionProcessor = new EmissionProcessor();
+    private final InjectionProcessor injectionProcessor = new InjectionProcessor();
+    private final CodeProcessor codeProcessor = new CodeProcessor();
+    private final ExpressionProcessor expressionProcessor = new ExpressionProcessor();
+    private final EmissionProcessor emissionProcessor = new EmissionProcessor();
 
-    private Map<String, Boolean> booleanVariablesMap = new HashMap<>();
-    private Map<String, String> variablesMap = new HashMap<>();
-    private Map<String, String> injectedObjects = new HashMap<>();
+    private final HeaderPreprocessor headerPreprocessor = new HeaderPreprocessor();
+
+    private final Map<String, Boolean> booleanVariablesMap = new HashMap<>();
+    private final Map<String, String> variablesMap = new HashMap<>();
+    private final Map<String, String> injectedObjects = new HashMap<>();
 
     @Override
     public WordplayOutput process(String input) throws WordplayException {
@@ -95,8 +98,8 @@ public class WordplayImpl implements Wordplay {
     }
 
     @Override
-    public Map<String, String> extractHeaders(String input) throws WordplayException {
-        return new HashMap<>();
+    public Map<String, String> extractHeaders(String input) {
+        return headerPreprocessor.process(input);
     }
 
     @Override
