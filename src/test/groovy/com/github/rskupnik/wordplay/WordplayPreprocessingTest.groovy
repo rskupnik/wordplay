@@ -33,9 +33,9 @@ class WordplayPreprocessingTest extends Specification {
         given:
         final String input = "Irrelevant text\n" +
                 "\$\n" +
-                "<m key:val|key2:val2\n" +
+                "<m map key:val|key2:val2\n" +
                 "!\$\n" +
-                "key value1\n" +
+                "key1 value1\n" +
                 "key2 value2"
 
         when:
