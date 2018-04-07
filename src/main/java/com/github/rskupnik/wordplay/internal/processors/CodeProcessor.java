@@ -18,6 +18,7 @@
 package com.github.rskupnik.wordplay.internal.processors;
 
 import com.github.rskupnik.wordplay.exceptions.WordplaySyntaxException;
+import com.github.rskupnik.wordplay.internal.preprocessors.HeaderPreprocessor;
 import com.github.rskupnik.wordplay.output.MetaObject;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
@@ -49,7 +50,14 @@ public final class CodeProcessor {
                         new ArrayList<MetaObject>()
                 );
 
-        String code = input.substring(delimIndex+3);
+        String code = "";
+        if (input.contains(HeaderPreprocessor.DELIMINATOR)) {
+            int endingDelimIndex = input.indexOf(HeaderPreprocessor.DELIMINATOR);
+            code = input.substring(delimIndex + 3, endingDelimIndex);
+        } else {
+            code = input.substring(delimIndex+3);
+        }
+
         String[] codeLines = code.split("\n");
         for (String codeLine : codeLines) {
             parseLine(codeLine, output);

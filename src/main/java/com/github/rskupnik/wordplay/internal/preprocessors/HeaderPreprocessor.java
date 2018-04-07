@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class HeaderPreprocessor {
 
-    private static final String DELIMINATOR = "\n!$\n";
+    public static final String DELIMINATOR = "\n!$\n";
 
     public Map<String, String> process(String input) {
         final Map<String, String> output = new HashMap<>();
