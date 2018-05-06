@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 
 public final class EmissionProcessor {
 
-    private static final Pattern PATTERN_ANCHORED = Pattern.compile("\\{<\\s*([\\w:\\|]+)\\s([\\w\\s]+)\\s*\\}");
+    private static final Pattern PATTERN_ANCHORED = Pattern.compile("\\{<\\s*([\\w#:\\|]+)\\s([\\w\\s]+)\\s*\\}");
     private static final Pattern PATTERN_SUBGROUP = Pattern.compile("(\\w+):(\\w+)(\\?\\=\\|)?");
     private static final Pattern PATTERN_TOKEN = Pattern.compile("\\$@s\\d+\\s");
     private static final String TOKEN_START = "$@s";
