@@ -20,6 +20,7 @@ package com.github.rskupnik.wordplay.internal.processors;
 import com.github.rskupnik.wordplay.exceptions.WordplaySyntaxException;
 import com.github.rskupnik.wordplay.internal.preprocessors.HeaderPreprocessor;
 import com.github.rskupnik.wordplay.output.MetaObject;
+import com.github.rskupnik.wordplay.util.LineEnding;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
@@ -39,7 +40,9 @@ public final class CodeProcessor {
      * a list of MetaObjects which represent the emitted objects
      */
     public Triplet<String, ArrayList<Pair<String, String>>, ArrayList<MetaObject>> parse(String input) throws WordplaySyntaxException {
-        int delimIndex = input.indexOf("\n$\n");
+        //int delimIndex = input.indexOf("\n$\n");
+        final String lineEnding = LineEnding.deduce(input);
+        int delimIndex = input.indexOf(lineEnding + "$" + lineEnding);
         if (delimIndex == -1)
             return Triplet.with(input, null, null);
 
@@ -52,13 +55,13 @@ public final class CodeProcessor {
 
         String code = "";
         if (input.contains(HeaderPreprocessor.DELIMINATOR)) {
-            int endingDelimIndex = input.indexOf(HeaderPreprocessor.DELIMINATOR);
+            int endingDelimIndex = input.indexOf(lineEnding + HeaderPreprocessor.DELIMINATOR + lineEnding);
             code = input.substring(delimIndex + 3, endingDelimIndex);
         } else {
             code = input.substring(delimIndex+3);
         }
 
-        String[] codeLines = code.split("\n");
+        String[] codeLines = code.split(lineEnding);
         for (String codeLine : codeLines) {
             parseLine(codeLine, output);
         }

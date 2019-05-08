@@ -1,21 +1,24 @@
 package com.github.rskupnik.wordplay.internal.preprocessors;
 
+import com.github.rskupnik.wordplay.util.LineEnding;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class HeaderPreprocessor {
 
-    public static final String DELIMINATOR = "\n!$\n";
+    public static final String DELIMINATOR = "!$";
 
     public Map<String, String> process(String input) {
         final Map<String, String> output = new HashMap<>();
+        final String lineEnding = LineEnding.deduce(input);
 
-        final int deliminatorIndex = input.indexOf(DELIMINATOR);
+        final int deliminatorIndex = input.indexOf(lineEnding + DELIMINATOR + lineEnding);
         if (deliminatorIndex == -1)
             return output;
 
-        final String body = input.substring(deliminatorIndex + DELIMINATOR.length());
-        for (String line : body.split("\n")) {
+        final String body = input.substring(deliminatorIndex + DELIMINATOR.length() + (lineEnding.length() * 2));
+        for (String line : body.split(lineEnding)) {
             final String[] split = line.split(" ");
             if (split == null || split.length <= 1)
                 continue;
