@@ -23,6 +23,7 @@ import com.github.rskupnik.wordplay.output.AnchoredObject
 import com.github.rskupnik.wordplay.output.MetaList
 import com.github.rskupnik.wordplay.output.MetaMap
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class WordplayFullTest extends Specification {
 
@@ -32,22 +33,23 @@ class WordplayFullTest extends Specification {
         wordplay.reset()
     }
 
-    def "should parse a properly prepared script"() {
+    @Unroll
+    def "should parse a properly prepared script with #_escaped_ line ending"() {
         given:
-        String input = "It was a {weather_sunny ? sunny | rainy} day.\n" +
-                "There was a {> guard} standing at the wall.\n" +
-                "The sky was {> 1}.\n" +
-                "In the middle of the room stood a {color:brown brown |:blue blue | black} table.\n" +
-                "The {< tint:blue magic stone} was {> 2} slightly.\n" +
-                "\$\n" +
-                "> 1 {weather_sunny ? clear | clouded}\n" +
-                "> 2 {< effect:vibrate|tint:blue vibrating}\n" +
-                "<l mobs Dreadful Vampire|Fearful Wolf\n" +
+        String input = "It was a {weather_sunny ? sunny | rainy} day." + _le_ +
+                "There was a {> guard} standing at the wall." + _le_ +
+                "The sky was {> 1}." + _le_ +
+                "In the middle of the room stood a {color:brown brown |:blue blue | black} table." + _le_ +
+                "The {< tint:blue magic stone} was {> 2} slightly." + _le_ +
+                "\$" + _le_ +
+                "> 1 {weather_sunny ? clear | clouded}" + _le_ +
+                "> 2 {< effect:vibrate|tint:blue vibrating}" + _le_ +
+                "<l mobs Dreadful Vampire|Fearful Wolf" + _le_ +
                 "<m params fighting_allowed:true|escape_allowed:false"
-        String expected = "It was a sunny day.\n" +
-                "There was a tall guard standing at the wall.\n" +
-                "The sky was clear.\n" +
-                "In the middle of the room stood a black table.\n" +
+        String expected = "It was a sunny day." + _le_ +
+                "There was a tall guard standing at the wall." + _le_ +
+                "The sky was clear." + _le_ +
+                "In the middle of the room stood a black table." + _le_ +
                 "The magic stone was vibrating slightly."
 
         when:
@@ -84,5 +86,11 @@ class WordplayFullTest extends Specification {
         mp.getBool("fighting_allowed") == true
         mp.getBool("escape_allowed") == false
         mp.getString("escape_allowed").equals("false")
+
+        where:
+        _le_    |   _escaped_
+        "\n"    |   "\\n"
+        "\r\n"  |   "\\r\\n"
+        "\r"    |   "\\r"
     }
 }

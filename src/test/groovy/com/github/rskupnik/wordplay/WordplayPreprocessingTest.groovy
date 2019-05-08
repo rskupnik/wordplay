@@ -54,4 +54,36 @@ class WordplayPreprocessingTest extends Specification {
         headers.get("key1").equals("value1")
         headers.get("key2").equals("value2")
     }
+
+    def "should extract headers for \\r\\n ending"() {
+        given:
+        final String input = "Irrelevant text\r\n" +
+                "!\$\r\n" +
+                "key1 value1\r\n" +
+                "key2 value2"
+
+        when:
+        final Map<String, String> headers = wordplay.extractHeaders(input)
+
+        then:
+        headers.size() == 2
+        headers.get("key1").equals("value1")
+        headers.get("key2").equals("value2")
+    }
+
+    def "should extract headers for \\r ending"() {
+        given:
+        final String input = "Irrelevant text\r" +
+                "!\$\r" +
+                "key1 value1\r" +
+                "key2 value2"
+
+        when:
+        final Map<String, String> headers = wordplay.extractHeaders(input)
+
+        then:
+        headers.size() == 2
+        headers.get("key1").equals("value1")
+        headers.get("key2").equals("value2")
+    }
 }
