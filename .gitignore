@@ -1,18 +1,52 @@
+### Gradle ###
+##############
+.gradle
+/build/
+# Should we exclude gradle/wrapper?
+# Could be useful for people who doe not have gradle installed.
+/gradle/wrapper/
+
+
+# Compiled class file
 *.class
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+# Log file
+*.log
+
 # Package Files #
 *.jar
 *.war
 *.ear
+*.zip
+*.tar.gz
+*.rar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# when there is not enough memory left during the build:
+#
+#      There is insufficient memory for the Java Runtime Environment to continue.
+#      Native memory allocation (malloc) failed to allocate ... bytes for
+#      - AllocateHeap
+#      - Chunk::new
 hs_err_pid*
+replay_pid*.log
 
+### Jetbrains Idea IntelliJ ###
 *.iml
-target/
+
+### Maven ###
+#############
+/target/
+
 .idea/
 *.png
 *.jpg
+
+
+### Local non-distributed documentation ###
+###########################################
+# All project related information, documentation and references which should NOT be part of the distribution
+/_docs/
