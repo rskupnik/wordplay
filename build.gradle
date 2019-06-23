@@ -1,0 +1,41 @@
+// Gradle version for Wordplay
+// fspyckerelle: started on 23/06/2019 08:00:09
+
+println """\
+Welcome to Gradle $gradle.gradleVersion - http://www.gradle.org
+Gradle home is set to: $gradle.gradleHomeDir
+Gradle user directory is set to: $gradle.gradleUserHomeDir
+
+Base directory: $projectDir
+Running script ${relativePath(buildFile)}
+"""
+
+// try to make the Spock tests generate the correct testreports
+
+//apply plugin: 'java' // java is already included with the groovy plugin
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+group         = 'com.github.rskupnik'
+version       = '2.2'
+description   = """wordplay"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+  //maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+dependencies {
+  // https://mvnrepository.com/artifact/org.javatuples/javatuples
+  // Java library for tuples in Java.
+  implementation     'org.javatuples:javatuples:1.2' // v1.2 of 2011-10-15
+
+  // https://mvnrepository.com/artifact/org.spockframework/spock-core
+  // Groovy 2.4 is used: v1.3-groovy-2.4 of 2019-03-05
+  //        2.5        : v1.3-groovy-2.5 of 2019-03-05
+  testImplementation 'org.spockframework:spock-core:1.3-groovy-2.4' //v1.3-groovy-2.4 of 2019-03-05
+}
+
